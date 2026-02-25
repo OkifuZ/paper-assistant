@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Cursor user-specific config (contains machine-local paths)
+.cursor/mcp.json
+
+# User-generated output
+Summaries/
+
+# PDF test data (large binary files)
+*.pdf

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pdf-reader-mcp"
+version = "0.1.0"
+description = "MCP server for structured, progressive PDF reading (academic papers)"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+keywords = ["mcp", "pdf", "academic", "papers"]
+dependencies = [
+    "mcp[cli]>=1.26.0",
+    "pymupdf>=1.27.1",
+]
+
+[project.scripts]
+pdf-reader-mcp = "pdf_reader_mcp.server:main"
+
+[project.urls]
+Repository = "https://github.com/YOUR_USERNAME/pdf-reader-mcp"
