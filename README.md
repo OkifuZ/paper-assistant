@@ -1,8 +1,15 @@
-# pdf-reader-mcp
+# Paper Assistant
 
-An MCP (Model Context Protocol) server that gives AI agents structured, progressive access to PDF documents -- designed for academic papers.
+A two-part toolkit for reading and summarizing academic papers (**Simulation and Deep Learning in Computer Graphics**) inside Cursor:
 
-## Tools
+1. **MCP Server** — gives AI agents structured, progressive access to PDF documents via the Model Context Protocol.
+2. **Cursor Skill** — teaches the agent *how* to use those tools to produce concise, mechanism-focused paper summaries.
+
+Each part works independently, but they are designed to be used together.
+
+---
+
+## MCP Tools
 
 | Tool | Description |
 |---|---|
@@ -11,6 +18,17 @@ An MCP (Model Context Protocol) server that gives AI agents structured, progress
 | `pdf_read_section` | Read text by section title (fuzzy matched against TOC) |
 | `pdf_get_page_images` | Extract images from a page as base64 |
 | `pdf_search` | Full-text search with context snippets |
+
+## Cursor Skill: Paper Summarization
+
+Located in `.cursor/skills/summarize-paper/`, the skill activates when you ask the agent to summarize, distill, or review a paper. It:
+
+- Reads the paper progressively (Abstract, Introduction, then key method sections)
+- Classifies the paper as Learning-oriented, Physics-oriented, or Hybrid
+- Outputs a concise Markdown summary following a fixed template (see `template.md`)
+- Saves output to `Summaries/`
+
+To use the skill in another project, copy `.cursor/skills/summarize-paper/` into your project's `.cursor/skills/` directory (or run the install script below).
 
 ## Prerequisites
 
@@ -116,17 +134,6 @@ The scripts will:
 4. Create a `Summaries/` directory in the target project
 
 If no target directory is given, the scripts default to the current directory.
-
-## Bundled Skill: Paper Summarization
-
-This repo includes a Cursor agent skill (`.cursor/skills/summarize-paper/`) that leverages the PDF reader MCP to produce structured summaries of CS/academic papers. The skill:
-
-- Reads the paper progressively (Abstract, Introduction, then key method sections)
-- Classifies the paper as Learning-oriented, Physics-oriented, or Hybrid
-- Outputs a concise Markdown summary following a fixed template
-- Saves output to `Summaries/`
-
-To use the skill in another project, copy the `.cursor/skills/summarize-paper/` folder into your project's `.cursor/skills/` directory (or run the install script above).
 
 ## License
 
