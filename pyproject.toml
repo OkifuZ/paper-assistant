@@ -19,4 +19,4 @@ dependencies = [
 pdf-reader-mcp = "pdf_reader_mcp.server:main"
 
 [project.urls]
-Repository = "https://github.com/YOUR_USERNAME/pdf-reader-mcp"
+Repository = "https://github.com/OkifuZ/paper-assistant.git"

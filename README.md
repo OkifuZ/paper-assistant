@@ -19,6 +19,12 @@ Each part works independently, but they are designed to be used together.
 | `pdf_get_page_images` | Extract images from a page as base64 |
 | `pdf_search` | Full-text search with context snippets |
 
+## MCP Prompt
+
+| Prompt | Description |
+|---|---|
+| `read_paper` | Progressive reading protocol — starts with metadata/TOC, reads the abstract, then drills into relevant sections. Accepts a `file_path` and an optional `question` to focus the reading. |
+
 ## Cursor Skill: Paper Summarization
 
 Located in `.cursor/skills/summarize-paper/`, the skill activates when you ask the agent to summarize, distill, or review a paper. It:
@@ -44,7 +50,7 @@ No need to clone this repo. Just configure your MCP client (see [Cursor Configur
 ### Option B: Clone and run locally
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/pdf-reader-mcp.git
+git clone https://github.com/OkifuZ/paper-assistant.git
 cd pdf-reader-mcp
 uv sync
 ```
@@ -52,7 +58,7 @@ uv sync
 ### Option C: Install with pip
 
 ```bash
-pip install git+https://github.com/YOUR_USERNAME/pdf-reader-mcp.git
+pip install git+https://github.com/OkifuZ/paper-assistant.git
 ```
 
 ## Cursor Configuration
