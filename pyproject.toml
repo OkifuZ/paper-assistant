@@ -13,6 +13,8 @@ keywords = ["mcp", "pdf", "academic", "papers"]
 dependencies = [
     "mcp[cli]>=1.26.0",
     "pymupdf>=1.27.1",
+    "Markdown>=3.5",
+    "playwright>=1.49",
 ]
 
 [project.scripts]

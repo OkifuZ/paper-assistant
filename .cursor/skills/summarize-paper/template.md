@@ -8,7 +8,7 @@
 
 ## 1. Problem
 
-- **Task:** ... *(Source: ...)*
+- **Task:** ... We want to... *(Source: ...)*
 - **Setting:** ... *(Source: ...)*
 - **Difficulty / bottleneck:** ... *(Source: ...)*
 - **Objective:** ... (keep LaTeX if any) *(Source: ...)*
@@ -50,6 +50,15 @@ Include ONLY the relevant blocks from Phase 1 classification:
 
 **Hybrid:** include relevant blocks from both groups, plus:
 - **Coupling:** ... (how physics and learning modules interact) *(Source: ...)*
+
+**General (neither Learning nor Physics):** Do NOT force-fit the blocks above. Instead, create **4–6 domain-appropriate blocks** that mirror the same format (`- **Label:** concise explanation *(Source: ...)*`). Choose labels that capture the paper's key design axes. Examples by sub-field (pick only what fits):
+
+- *Rendering*: Scene representation, Light transport model, Sampling / importance strategy, Acceleration structure, Shading model
+- *Geometry processing*: Shape representation, Operator / discretization, Optimization / energy, Robustness handling
+- *Systems / HPC*: Workload model, Scheduling / allocation, Communication pattern, Scalability mechanism
+- *Visualization / HCI*: Data abstraction, Visual encoding, Interaction model, Evaluation methodology
+
+These are starting points — rename, drop, or invent labels as the paper demands. The goal is that someone reading only this section understands *what the method is made of*, the same way the Physics blocks do for a simulation paper.
 
 Each paper's importance may vary so have emphasis adaptively 
 

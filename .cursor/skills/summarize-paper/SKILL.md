@@ -21,14 +21,15 @@ Read **only** Abstract + Introduction (+ Conclusion if needed). Then determine:
 1. **Paper type** — use structural signals, not keywords:
    - *Learning*: trainable parameters, loss minimization, training loop, inference procedure, dataset/benchmark.
    - *Physics*: state evolution, governing equations/constraints/energy, solver/linear system, time integration/stability.
-   - *Hybrid*: both types central.
+   - *Hybrid*: both Learning and Physics are central.
+   - *General*: none of the above dominate (e.g., rendering, geometry processing, HCI, systems, PL). Use this when the paper's core contribution does not revolve around a training loop or a physics solver.
 2. **Sections to read** — list the method/technical sections from the TOC that must be read in Phase 2.
 3. **Search queries** — 3-5 short strings for `pdf_search` to locate key details (e.g., "Algorithm", "loss", "dataset", "solver", "convergence").
 
 ## Phase 2: Write
 
 1. Read only the sections identified in Phase 1. Use `pdf_search` with the queries from Phase 1.
-2. Follow [template.md](template.md) exactly. Include only the mechanism blocks matching the paper type.
+2. Follow [template.md](template.md) exactly. Include only the mechanism blocks matching the paper type. For *General* papers, invent domain-appropriate blocks that parallel the structure and granularity of the Learning/Physics blocks (see template for guidance).
 3. For the logical flow, map every paper to: **Problem → Bottleneck → Mechanism → Steps → Evidence → Boundary**.
 
 ## Style
@@ -53,3 +54,4 @@ Read **only** Abstract + Introduction (+ Conclusion if needed). Then determine:
 - Append `*(Source: Section X Title)*` after each item/bullet.
 - Hard limit: **680 words** (excluding pseudocode/algorithm block). Aim for the length in [example.md](example.md).
 - **Save output using the `save_summary` MCP tool.** Pass the source PDF path and the full Markdown content. The tool derives the filename (`<pdf_stem>_summary.md`), creates `Summaries/` if needed, and writes the file. Do NOT use any other method to write the summary.
+- **After saving, call the `convert_md_to_pdf` MCP tool** with the path returned by `save_summary`. This produces a matching PDF in the same directory (`Summaries/<pdf_stem>_summary.pdf`). Both files share the same base name — only the extension differs.
