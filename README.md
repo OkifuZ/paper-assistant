@@ -1,15 +1,28 @@
 # Paper Assistant
 
-A two-part toolkit for reading and summarizing academic papers (**Simulation and Deep Learning in Computer Graphics**) inside Cursor:
+A toolkit for reading and summarizing academic papers (**Simulation & Deep Learning in Computer Graphics**) inside Cursor, combining an MCP server with a Cursor agent skill.
 
-1. **MCP Server** — gives AI agents structured, progressive access to PDF documents via the Model Context Protocol.
-2. **Cursor Skill** — teaches the agent *how* to use those tools to produce concise, mechanism-focused paper summaries.
+## Quick Start
 
-Each part works independently, but they are designed to be used together.
+Requires **Python 3.12+**. Clone the repo, then run:
 
----
+```powershell
+# Windows
+.\install.ps1
 
-## MCP Tools
+# macOS / Linux
+./install.sh
+```
+
+This handles everything — finding/installing `uv`, syncing dependencies, configuring the MCP server, and creating working directories. Restart Cursor after it finishes.
+
+**Usage:**
+1. Ask the agent: *"Summarize C:\Notes\papers\my_paper.pdf"* (PDFs can live anywhere)
+2. The summary appears in `Summaries/my_paper_summary.md`
+
+## MCP Tools (agent-facing)
+
+These tools are exposed to the AI agent via MCP — they are not CLI commands for humans. The agent calls them automatically when you ask it to read or summarize a paper.
 
 | Tool | Description |
 |---|---|
@@ -18,128 +31,80 @@ Each part works independently, but they are designed to be used together.
 | `pdf_read_section` | Read text by section title (fuzzy matched against TOC) |
 | `pdf_get_page_images` | Extract images from a page as base64 |
 | `pdf_search` | Full-text search with context snippets |
-
-## MCP Prompt
+| `save_summary` | Save a Markdown summary to `Summaries/<pdf_name>_summary.md` (auto-creates folder) |
 
 | Prompt | Description |
 |---|---|
-| `read_paper` | Progressive reading protocol — starts with metadata/TOC, reads the abstract, then drills into relevant sections. Accepts a `file_path` and an optional `question` to focus the reading. |
+| `read_paper` | Progressive reading protocol — metadata/TOC first, then drills into sections. Accepts `file_path` and optional `question`. |
 
-## Cursor Skill: Paper Summarization
+## Cursor Skill
 
-Located in `.cursor/skills/summarize-paper/`, the skill activates when you ask the agent to summarize, distill, or review a paper. It:
+Located in `.cursor/skills/summarize-paper/`. Activates when you ask the agent to summarize, distill, or review a paper. It reads progressively, classifies the paper (Learning / Physics / Hybrid), and outputs a structured Markdown summary following `template.md`.
 
-- Reads the paper progressively (Abstract, Introduction, then key method sections)
-- Classifies the paper as Learning-oriented, Physics-oriented, or Hybrid
-- Outputs a concise Markdown summary following a fixed template (see `template.md`)
-- Saves output to `Summaries/`
+## Project Layout
 
-To use the skill in another project, copy `.cursor/skills/summarize-paper/` into your project's `.cursor/skills/` directory (or run the install script below).
-
-## Prerequisites
-
-- Python 3.12+
-- [uv](https://docs.astral.sh/uv/getting-started/installation/) (recommended) or pip
-
-## Installation
-
-### Option A: Zero-clone via `uvx` (recommended)
-
-No need to clone this repo. Just configure your MCP client (see [Cursor Configuration](#cursor-configuration) below). `uvx` will automatically fetch, build, and cache the server.
-
-### Option B: Clone and run locally
-
-```bash
-git clone https://github.com/OkifuZ/paper-assistant.git
-cd pdf-reader-mcp
-uv sync
+```
+PaperAssistant/
+├── Summaries/           ← Generated summaries land here (gitignored)
+├── src/pdf_reader_mcp/  ← MCP server source
+├── .cursor/
+│   ├── mcp.json         ← MCP client config (gitignored, machine-local)
+│   └── skills/          ← Cursor agent skills
+├── pyproject.toml
+└── uv.lock
 ```
 
-### Option C: Install with pip
+## Manual Installation
+
+If you prefer not to use the install script:
 
 ```bash
-pip install git+https://github.com/OkifuZ/paper-assistant.git
+pip install uv              # or see https://docs.astral.sh/uv
+uv sync                     # install dependencies into .venv/
+uv run pdf-reader-mcp       # verify server starts (Ctrl+C to stop)
 ```
 
-## Cursor Configuration
-
-Add the following to your project's `.cursor/mcp.json` file. Create the file if it doesn't exist.
-
-### For Option A (uvx, zero-clone):
+Then create `.cursor/mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "pdf-reader": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/YOUR_USERNAME/pdf-reader-mcp",
-        "pdf-reader-mcp"
-      ]
+      "command": "/absolute/path/to/uv.exe",
+      "args": ["--directory", "/absolute/path/to/PaperAssistant", "run", "pdf-reader-mcp"]
     }
   }
 }
 ```
 
-### For Option B (local clone):
+Use absolute paths to avoid PATH issues when Cursor spawns the process. Restart Cursor after editing.
 
-```json
-{
-  "mcpServers": {
-    "pdf-reader": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "/absolute/path/to/pdf-reader-mcp",
-        "run",
-        "pdf-reader-mcp"
-      ]
-    }
-  }
-}
-```
+> **Windows PATH note:** If `uv` is not recognized after `pip install uv`, find the binary with:
+> `python -c "from uv import find_uv_bin; print(find_uv_bin())"`
 
-Replace `/absolute/path/to/pdf-reader-mcp` with the actual path to your cloned repo.
+> **Transient install error:** On some Windows setups the first `uv sync` fails with an OS permissions error (antivirus). Simply retry.
 
-### For Option C (pip installed):
+## Gitignored Paths
 
-```json
-{
-  "mcpServers": {
-    "pdf-reader": {
-      "command": "pdf-reader-mcp"
-    }
-  }
-}
-```
+| Path | Reason |
+|---|---|
+| `.venv/` | Local virtual environment |
+| `.cursor/mcp.json` | Machine-local absolute paths |
+| `Summaries/*` | Generated output |
+| `__pycache__/`, `build/`, `dist/` | Python build artifacts |
 
-After editing `mcp.json`, restart Cursor for the MCP to take effect.
+<details>
+<summary><strong>What <code>install.ps1</code> does step by step</strong></summary>
 
-## Install Script (one-command setup)
+1. **Find `uv`** — checks PATH via `Get-Command uv`. If not found, locates it through `python -c "from uv import find_uv_bin; ..."`. If still missing, auto-installs via `pip install uv`.
+2. **Resolve directories** — resolves `TargetDir` (defaults to `.`) and `ScriptDir` (where `install.ps1` lives) to absolute paths.
+3. **`uv sync`** — runs `uv sync` in the repo directory to create `.venv/` and install all dependencies (`mcp[cli]`, `pymupdf`, etc.). Automatically retries once on failure (works around a transient Windows permissions/antivirus error).
+4. **Verify MCP server** — starts `uv run pdf-reader-mcp`, waits 3 seconds to confirm it doesn't crash, then kills the process.
+5. **Write `.cursor/mcp.json`** — creates or merges the `pdf-reader` MCP entry using the **absolute path** to `uv.exe` as the command (avoids PATH resolution issues when Cursor spawns the process).
+6. **Copy skill files** — copies `.cursor/skills/summarize-paper/` from the repo to the target project. Skipped when target == repo (files already in place).
+7. **Create `Summaries/`** — creates the output directory with a `.gitkeep` file so git tracks the empty folder while ignoring its contents.
 
-If you cloned this repo, you can use the included install scripts to automatically configure MCP and copy the bundled Cursor skill into a target project:
-
-**Windows (PowerShell):**
-
-```powershell
-.\install.ps1 -TargetDir "C:\path\to\your\project"
-```
-
-**macOS / Linux:**
-
-```bash
-./install.sh /path/to/your/project
-```
-
-The scripts will:
-
-1. Verify that `uv` is installed
-2. Add the `pdf-reader` MCP entry to `<target>/.cursor/mcp.json` (merges with existing config)
-3. Copy the paper-summarization skill to `<target>/.cursor/skills/`
-4. Create a `Summaries/` directory in the target project
-
-If no target directory is given, the scripts default to the current directory.
+</details>
 
 ## License
 

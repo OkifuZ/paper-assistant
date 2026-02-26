@@ -5,7 +5,7 @@ description: Summarize computer science academic papers into structured Markdown
 
 # CS Paper Summarization
 
-Distill a CS paper into a concise, mechanism-focused Markdown summary and save it to `Summaries/`.
+Distill a CS paper into a concise, mechanism-focused Markdown summary. The source PDF can be anywhere on disk — the agent reads it via its absolute or relative path. Output is always saved to `Summaries/<pdf_filename>_summary.md` inside the project root.
 
 ## Tools & Constraints
 
@@ -52,4 +52,4 @@ Read **only** Abstract + Introduction (+ Conclusion if needed). Then determine:
 
 - Append `*(Source: Section X Title)*` after each item/bullet.
 - Hard limit: **680 words** (excluding pseudocode/algorithm block). Aim for the length in [example.md](example.md).
-- Save to `Summaries/{paper_title_snake_case}.md` (create directory if needed).
+- **Save output using the `save_summary` MCP tool.** Pass the source PDF path and the full Markdown content. The tool derives the filename (`<pdf_stem>_summary.md`), creates `Summaries/` if needed, and writes the file. Do NOT use any other method to write the summary.

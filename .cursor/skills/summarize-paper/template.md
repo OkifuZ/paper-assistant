@@ -28,7 +28,7 @@
 
 ### High-Level Idea
 
-{Intuitive explanation — make the reader think "ah, I get it" before any equations.} *(Source: ...)*
+{Intuitive explanation — make the reader think "ah, I get it" before any equations. And keep it short is preferred, no sacrifice on intuition} *(Source: ...)*
 
 ### Mechanism Details
 
@@ -51,10 +51,13 @@ Include ONLY the relevant blocks from Phase 1 classification:
 **Hybrid:** include relevant blocks from both groups, plus:
 - **Coupling:** ... (how physics and learning modules interact) *(Source: ...)*
 
+Each paper's importance may vary so have emphasis adaptively 
+
 ---
 
-## 4. How It Works (5 steps max)
+## 4. How It Works 
 
+(5 steps max， less is preferred)
 > 1. ... *(Source: ...)*
 > 2. ... *(Source: ...)*
 > 3. ... *(Source: ...)*

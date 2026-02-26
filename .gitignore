@@ -13,7 +13,5 @@ wheels/
 .cursor/mcp.json
 
 # User-generated output
-Summaries/
-
-# PDF test data (large binary files)
-*.pdf
+Summaries/*
+!Summaries/.gitkeep

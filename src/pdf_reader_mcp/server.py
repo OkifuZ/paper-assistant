@@ -567,6 +567,36 @@ def pdf_search(file_path: str, query: str, max_results: int = 10) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Tool 6: save_summary
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+def save_summary(pdf_file_path: str, markdown_content: str) -> str:
+    """Save a paper summary to the Summaries/ directory.
+
+    Derives the output filename from the PDF's filename (not the paper title):
+    strips the .pdf extension, appends '_summary.md'.
+    Creates the Summaries/ directory if it does not exist.
+
+    Args:
+        pdf_file_path: The path to the source PDF (used only to derive the output name).
+        markdown_content: The full Markdown summary to write.
+    """
+    pdf_name = Path(pdf_file_path).stem
+    if not pdf_name:
+        return "ERROR: Could not derive a filename from the given pdf_file_path."
+
+    out_dir = Path.cwd() / "Summaries"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    out_file = out_dir / f"{pdf_name}_summary.md"
+    out_file.write_text(markdown_content, encoding="utf-8")
+
+    return f"Summary saved to: {out_file}"
+
+
+# ---------------------------------------------------------------------------
 # Prompt 1: read_paper
 # ---------------------------------------------------------------------------
 
